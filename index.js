@@ -1,4 +1,3 @@
-console.log('Loading function');
 const https = require('https');
 const url = require('url');
 const slack_url = process.env.SLACK_WEBHOOK_URL;
