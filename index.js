@@ -1,6 +1,11 @@
+// * 各イベントの取得可能な値は下記を参照して下さい。
+// リファレンス: https://developer.github.com/v3/activity/events/types/
+// * マッピング
+// デフォルトのAPIGateWayではheaderを取得できないため、下記のマッピングを設定する必要があります。
+//
 const https = require('https');
 const url = require('url');
-const slack_url = process.env.SLACK_WEBHOOK_URL;
+const slack_url = process.env.SLACK_WEBHOOK_URL; //環境変数はLambdaのテキストフィールドに入力
 const slack_req_opts = url.parse(slack_url);
 slack_req_opts.method = 'POST';
 slack_req_opts.headers = {'Content-Type': 'application/json'};
@@ -45,10 +50,10 @@ exports.handler = function(event, context) {
       case 'create':
       case 'delete':
         if(body.ref_type === 'tag'){
-          event_url = body.repository.git_tags_url;
+          event_url = body.repository.html_url + '/tree/' + body.ref;
           event_name = event_type + ' ' + body.ref_type;
         }else if(body.ref_type === 'branch'){
-          event_url = body.repository.branches_url;
+          event_url = body.repository.html_url + '/tree/' + body.ref;
           event_name = event_type + ' ' + body.ref_type;
         }
         break;
